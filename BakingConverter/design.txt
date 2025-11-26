@@ -1,6 +1,7 @@
 Baking Converter
 
 a converter from Imperial (cups/spoons, etc) to metric (grams) for different kinds of ingredients
+source of conversions: https://www.weekendbakery.com/cooking-conversions/
 
 
 Program start: 
@@ -20,6 +21,10 @@ cocoa powder - cups and spoons
 corn starch - cups and spoons
 salt - spoons
 butter - cups, spoons and sticks
+
+
+next steps:
+- add error handling
 
 
 Improvement ideas:
