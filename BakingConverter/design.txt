@@ -1,0 +1,27 @@
+Baking Converter
+
+a converter from Imperial (cups/spoons, etc) to metric (grams) for different kinds of ingredients
+
+
+Program start: 
+Explain what it does
+List ingredients that can be converted
+Ask for input of ingredient
+Ask for input of unit
+Ask for input of amount
+Print out converted amount
+
+ingredients:
+flour - cups and spoons
+granulated sugar - cups and spoons
+icing sugar - cups and spoons
+brown sugar - cups and spoons
+cocoa powder - cups and spoons
+corn starch - cups and spoons
+salt - spoons
+butter - cups, spoons and sticks
+
+
+Improvement ideas:
+- take file input of a recipe, parse ingredients and return converted file
+- add Fahrenheit - Celsius conversion
