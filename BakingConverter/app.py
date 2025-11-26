@@ -1,30 +1,24 @@
-def convert_flour(input_amount):
-    output_amount = input_amount * 125
-    return output_amount
+def convert(ingredient):
+    ingredients = {
+        "f": ["flour", {"cups": 125, "tablespoons": 9}],
+        "i": ["icing sugar", {"cups": 125}],
+        "g": ["granulated sugar", {"cups": 200, "tablespoons": 12.6}],
+        "c": ["cream", {"cups": 240, "tablespoons": 15} ],
+        "s": ["corn starch", {"cups": 150, "teaspoons": 3.3}],
+        "b": ["butter", {"cups": 226, "sticks": 113, "tablespoons": 14}]
+    }
 
+    current_ingredient = ingredients[ingredient]
+    available_units = list(current_ingredient[1])
+    print("Which unit would you like to convert? ")
+    for unit in available_units:
+        print(unit)
+    input_unit = input("\nEnter unit (full word): \n").lower()
+    input_amount = int(input(f"\nHow much does the recipe require in {input_unit}? \n"))
+    output_amount = input_amount * current_ingredient[1][input_unit]
 
-def convert_icing_sugar(input_amount):
-    output_amount = input_amount * 125
-    return output_amount
+    print(f"\nYou require {output_amount} grams of {current_ingredient[0]} for your recipe.")
 
-
-def convert_granulated_sugar(input_amount):
-    output_amount = input_amount * 200
-    return output_amount
-
-
-def convert_cream(input_amount):
-    output_amount = input_amount * 240
-    return output_amount
-
-
-def convert_corn_starch(input_amount):
-    output_amount = input_amount * 150
-    return output_amount
-
-
-def convert_butter(input_amount):
-    output_amount = input_amount * 226
     return output_amount
 
 
@@ -38,23 +32,4 @@ The following ingredients can be converted:
       ''')
 
 ingredient = input("Which ingredient would you like to convert? Enter the letter in parentheses. ").lower()
-input_amount = int(input("How much does the recipe require in cups? "))
-
-
-match ingredient:
-    case "f":
-        output_amount = convert_flour(input_amount)
-    case "i":
-        output_amount = convert_icing_sugar(input_amount)
-    case "g":
-        output_amount = convert_granulated_sugar(input_amount)
-    case "c":
-        output_amount = convert_cream(input_amount)
-    case "s":
-        output_amount = convert_corn_starch(input_amount)
-    case "b":
-        output_amount = convert_butter(input_amount)
-    case _:
-        print("Sorry, I can't find that ingredient.")
-
-print(f"You require {output_amount} grams for your recipe.")
+output_amount = convert(ingredient)
