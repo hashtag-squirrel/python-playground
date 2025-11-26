@@ -18,6 +18,8 @@ def generate_col_numbers(col):
                 new_number = random.randint(61, 75)
         if new_number not in numbers:
             numbers.append(new_number)
+    if col == 2:
+        numbers[2] = "O"
     return numbers
 
 
@@ -35,10 +37,7 @@ def print_card(card):
     print('''
   B   I   N   G   O ''')
     for row in range(5):
-        if row == 2:
-                print(f'''
- {card[0][row]}  {card[1][row]}   O  {card[3][row]}  {card[4][row]}''')
-        else: print(f'''
+        print(f'''
  {card[0][row]}  {card[1][row]}  {card[2][row]}  {card[3][row]}  {card[4][row]}''')
             
 
@@ -65,10 +64,49 @@ def draw_number():
             return drawn_number
 
 
-def check_card():
-    """checks if there is a sequence of 5 Xs or 4 Xs and O in a row, column or diagonally"""
-    
+def check_columns(card):
+    """checks if there is a sequence of 5 Xs or 4 Xs and O in a column
+    Returns a boolean"""
+    i = 0
+    for col in card:
+        if i == 2:
+            if col.count("X") >=4:
+                print(f"At least 4 X in column {i+1}")
+                return True
+        else:
+            if col.count("X") >= 5:
+                print(f"At least 5 X in column {i+1}")
+                return True
+        i += 1
+    return False
 
+
+def check_rows(card):
+    """checks if there is a sequence of 5 Xs or 4 Xs and O in a row
+    Returns a boolean"""
+    i = 0
+    for i in range(5):
+        row = []
+        for column in range(5):
+            row.append(card[column][i])
+        if i == 2:
+            if row.count("X") == 4:
+                print(f"At least 4 X in row {i+1}")
+                print(f'Row {i+1}: {row}')
+                return True
+        else: 
+            if row.count("X") == 5:
+                print(f"At least 5 X in row {i+1}")
+                print(f'Row {i+1}: {row}')
+                return True
+    return False
+
+
+def check_card(card):
+    """checks if there is a sequence of 5 Xs or 4 Xs and O in a row, column or diagonally"""
+    check_columns(card)
+    check_rows(card)
+        
 
 numbers_drawn = []
 card = generate_card()
@@ -79,4 +117,5 @@ while True:
     update_card(card, new_number)
     print(new_number)
     print_card(card)
+    check_card(card)
     input("Press 'Enter' to proceed to next turn.")
