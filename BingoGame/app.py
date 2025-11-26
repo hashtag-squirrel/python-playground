@@ -1,6 +1,7 @@
 import random
 
 def generate_col_numbers(col):
+    """Generates the randomized column numbers"""
     numbers = []
 
     while len(numbers) < 5:
@@ -21,6 +22,7 @@ def generate_col_numbers(col):
 
 
 def generate_card():
+    """Generates the randomized card numbers"""
     card = []
     for col in range(5):
         col_numbers = generate_col_numbers(col)
@@ -29,6 +31,7 @@ def generate_card():
 
 
 def print_card(card):
+    """prints out the card in a formatted way""" 
     print('''
   B   I   N   G   O ''')
     for row in range(5):
@@ -40,7 +43,7 @@ def print_card(card):
             
 
 def update_card(card, number):
-    # checks the card for drawn number and updates the card values
+    """checks the card for drawn number and updates the card values"""
     i = 0
     coordinates = []
     for list in card:
@@ -53,12 +56,18 @@ def update_card(card, number):
 
 
 def draw_number():
-    # generates a random number and checks if it was already drawn. Will generate numbers until one wasn't drawn yet.
+    """generates a random number and checks if it was already drawn. 
+    Will generate numbers until one wasn't drawn yet."""
     while True:
         drawn_number = random.randint(1,76)
         if drawn_number not in numbers_drawn:
             numbers_drawn.append(drawn_number)
             return drawn_number
+
+
+def check_card():
+    """checks if there is a sequence of 5 Xs or 4 Xs and O in a row, column or diagonally"""
+    
 
 
 numbers_drawn = []
