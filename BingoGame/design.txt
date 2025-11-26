@@ -27,6 +27,14 @@
 # 5  20  35  50  65
 
 
-card[column][row]
+
+Improvements: 
+- add flavor text for the different stages of the game
+- add little breaks between announcements and e.g. number drawing
+- clear the board before printing the new card
+- add a counter for rounds
+- add a two player mode
+
+
 
 

@@ -1,7 +1,9 @@
 import random
 
 def generate_col_numbers(col):
-    """Generates the randomized column numbers"""
+    """Generates the randomized column numbers
+    Returns a list of numbers representing a column"""
+
     numbers = []
 
     while len(numbers) < 5:
@@ -24,7 +26,9 @@ def generate_col_numbers(col):
 
 
 def generate_card():
-    """Generates the randomized card numbers"""
+    """Generates the randomized card numbers
+    Returns the nested card list"""
+
     card = []
     for col in range(5):
         col_numbers = generate_col_numbers(col)
@@ -34,6 +38,7 @@ def generate_card():
 
 def print_card(card):
     """prints out the card in a formatted way""" 
+
     print('''
   B   I   N   G   O ''')
     for row in range(5):
@@ -42,7 +47,9 @@ def print_card(card):
             
 
 def update_card(card, number):
-    """checks the card for drawn number and updates the card values"""
+    """checks the card for drawn number and updates the card values
+    Returns the updated card list"""
+
     i = 0
     coordinates = []
     for list in card:
@@ -56,7 +63,9 @@ def update_card(card, number):
 
 def draw_number():
     """generates a random number and checks if it was already drawn. 
-    Will generate numbers until one wasn't drawn yet."""
+    Will generate numbers until one wasn't drawn yet.
+    Returns the new number"""
+
     while True:
         drawn_number = random.randint(1,76)
         if drawn_number not in numbers_drawn:
@@ -67,15 +76,14 @@ def draw_number():
 def check_columns(card):
     """checks if there is a sequence of 5 Xs or 4 Xs and O in a column
     Returns a boolean"""
+
     i = 0
     for col in card:
         if i == 2:
             if col.count("X") >=4:
-                print(f"At least 4 X in column {i+1}")
                 return True
         else:
             if col.count("X") >= 5:
-                print(f"At least 5 X in column {i+1}")
                 return True
         i += 1
     return False
@@ -84,6 +92,7 @@ def check_columns(card):
 def check_rows(card):
     """checks if there is a sequence of 5 Xs or 4 Xs and O in a row
     Returns a boolean"""
+
     i = 0
     for i in range(5):
         row = []
@@ -91,13 +100,9 @@ def check_rows(card):
             row.append(card[column][i])
         if i == 2:
             if row.count("X") == 4:
-                print(f"At least 4 X in row {i+1}")
-                print(f'Row {i+1}: {row}')
                 return True
         else: 
             if row.count("X") == 5:
-                print(f"At least 5 X in row {i+1}")
-                print(f'Row {i+1}: {row}')
                 return True
     return False
 
@@ -105,9 +110,6 @@ def check_rows(card):
 def check_diagonals(card):
     """checks if there is a sequence of 4 Xs in a diagonal
     Returns a boolean"""
-
-    # Win constellation 1: card[0][0], card[1,1], card[3,3], card [4,4]   
-    # Win constellation 2: card[0][4], card[1,3], card[3,1], card [4,0]
 
     if card[0][0] == "X" and card[1,1] == "X" and card[3,3] == "X" and card [4,4] == "X":
         return True
@@ -118,19 +120,27 @@ def check_diagonals(card):
 
 
 def check_card(card):
-    """checks if there is a sequence of 5 Xs or 4 Xs and O in a row, column or diagonally"""
+    """checks if there is a sequence of 5 Xs or 4 Xs and O in a row, column or diagonally
+    Returns a boolean"""
+
     if check_columns(card) or check_rows(card) or check_diagonals(card):
         return True
         
 
+# Game start - initializing the drawn numbers pool and generating the game card
+print("Let's play Bingo!")
 numbers_drawn = []
 card = generate_card()
 print_card(card)
 input("Press 'Enter' to start the game.")
+
+# Main game loop
 while True:
+    # drawing a number (and printing it)
     new_number = draw_number()
+    print(f'{new_number}')
+
     update_card(card, new_number)
-    print(new_number)
     print_card(card)
     if check_card(card):
         print("You won!")
