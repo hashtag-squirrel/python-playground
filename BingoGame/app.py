@@ -102,10 +102,25 @@ def check_rows(card):
     return False
 
 
+def check_diagonals(card):
+    """checks if there is a sequence of 4 Xs in a diagonal
+    Returns a boolean"""
+
+    # Win constellation 1: card[0][0], card[1,1], card[3,3], card [4,4]   
+    # Win constellation 2: card[0][4], card[1,3], card[3,1], card [4,0]
+
+    if card[0][0] == "X" and card[1,1] == "X" and card[3,3] == "X" and card [4,4] == "X":
+        return True
+    elif card[0][4] == "X" and card[1,3] == "X" and card[3,1] == "X" and card [4,0] == "X":
+        return True
+    else: 
+        return False
+
+
 def check_card(card):
     """checks if there is a sequence of 5 Xs or 4 Xs and O in a row, column or diagonally"""
-    check_columns(card)
-    check_rows(card)
+    if check_columns(card) or check_rows(card) or check_diagonals(card):
+        return True
         
 
 numbers_drawn = []
@@ -117,5 +132,7 @@ while True:
     update_card(card, new_number)
     print(new_number)
     print_card(card)
-    check_card(card)
+    if check_card(card):
+        print("You won!")
+        break
     input("Press 'Enter' to proceed to next turn.")
