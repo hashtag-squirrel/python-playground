@@ -24,9 +24,10 @@ butter - cups, spoons and sticks
 
 
 next steps:
-- add error handling
+- add error handling for user input
+- add error handling for file (check if file exists, allow for different file names, handles lines that look different)
 
 
 Improvement ideas:
-- take file input of a recipe, parse ingredients and return converted file
 - add Fahrenheit - Celsius conversion
+- add metric to imperial conversion
