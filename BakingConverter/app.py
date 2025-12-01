@@ -1,22 +1,25 @@
-def convert(ingredient):
-    """Asks for input of unit and amount and returns the converted output in grams"""
+def convert(ingredient, unit, amount):
+    """Returns the converted output in grams"""
+    output_amount = amount * ingredient[1][unit]
+    print(f"\nYou require {output_amount} grams of {ingredient[0]} for your recipe.")
 
-    current_ingredient = INGREDIENTS[ingredient]
+    return output_amount
+
+
+def parse_user_input(ingredient):
+    """Asks for input of unit and amount"""
     
-    available_units = list(current_ingredient[1])
+    available_units = list(ingredient[1])
     print("Which unit would you like to convert? ")
     for unit in available_units:
         print(unit)
     input_unit = input("\nEnter unit (full word): \n").lower()
     input_amount = int(input(f"\nHow much does the recipe require in {input_unit}? \n"))
-    output_amount = input_amount * current_ingredient[1][input_unit]
-
-    print(f"\nYou require {output_amount} grams of {current_ingredient[0]} for your recipe.")
-
-    return output_amount
+    convert(ingredient, input_unit, input_amount)
 
 
 def parse_file():
+    """Parses a file's ingredients and converts them, outputs a new file"""
     f = open("BakingConverter/recipe.txt", "r")
     lines = f.readlines()
     
@@ -61,5 +64,4 @@ else:
         ''')
 
     ingredient = input("Which ingredient would you like to convert? Enter the letter in parentheses. ").lower()
-
-    output_amount = convert(ingredient)
+    current_ingredient = INGREDIENTS[ingredient]
