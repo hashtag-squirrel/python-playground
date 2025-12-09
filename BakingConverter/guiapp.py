@@ -10,15 +10,15 @@ DEFAULT_FONT = ("Arial", 15)
 
 def start():
     """Returns to start screen/New conversion"""
-    clear_frame(frame1)
+    clear_frame(main_frame)
 
     lbl = tk.Label(
-        frame1,
-        text="Would you like to convert a single ingredient or convert a recipe file?", # noqa
+        main_frame,
+        text="Click the button below to start conversion", # noqa
         font=DEFAULT_FONT)
     lbl.pack(side="top", pady=SMALL_PAD)
 
-    centered_frame = tk.Frame(frame1, width=200, height=200)
+    centered_frame = tk.Frame(main_frame, width=200, height=200)
     centered_frame.pack(side="top", pady=SMALL_PAD)
 
     btn = tk.Button(
@@ -28,12 +28,12 @@ def start():
         command=single_ingredient)
     btn.pack(side="left", pady=SMALL_PAD, padx=SMALL_PAD)
 
-    btn = tk.Button(
-        centered_frame,
-        text="Recipe file",
-        font=DEFAULT_FONT,
-        command=recipe_file)
-    btn.pack(side="left", pady=SMALL_PAD, padx=SMALL_PAD)
+    # btn = tk.Button(
+    #     centered_frame,
+    #     text="Recipe file",
+    #     font=DEFAULT_FONT,
+    #     command=recipe_file)
+    # btn.pack(side="left", pady=SMALL_PAD, padx=SMALL_PAD)
 
 
 def clear_frame(frame):
@@ -42,21 +42,75 @@ def clear_frame(frame):
         widget.destroy()  # deleting widget
 
 
-def submit():
-    centered_frame = tk.Frame(frame1, width=200, height=200)
-    centered_frame.pack(side="top", pady=SMALL_PAD)
-    lbl = tk.Label(centered_frame, text="", font=LARGE_FONT)
+def submit_ingredient(var, index, mode):
+    clear_frame(main_frame)
+    ingredient = opt_ingredient.get()
+
+    lbl = tk.Label(
+        main_frame,
+        text=f"You picked {ingredient}",
+        font=DEFAULT_FONT)
     lbl.pack(side="top", pady=SMALL_PAD)
-    lbl.config(text=opt.get())
+
+    lbl = tk.Label(main_frame, text="Pick your unit", font=DEFAULT_FONT)
+    lbl.pack(side="top", pady=SMALL_PAD)
+
+    units = list(INGREDIENTS[ingredient[0]][1])
+    global opt_unit
+    opt_unit = tk.StringVar(value=units[0])
+
+    centered_frame = tk.Frame(main_frame, width=200, height=200)
+    centered_frame.pack(side="top", pady=SMALL_PAD)
+
+    tk.OptionMenu(centered_frame, opt_unit, *units).pack(side="top", pady=10)
+
+    opt_unit.trace("w", submit_unit)
+
+
+def submit_unit(var, index, mode):
+    clear_frame(main_frame)
+    global unit
+    unit = opt_unit.get()
+    global ingredient
+    ingredient = opt_ingredient.get()
+
+    lbl = tk.Label(main_frame, text=f"You picked {unit}", font=DEFAULT_FONT)
+    lbl.pack(side="top", pady=SMALL_PAD)
+
+    lbl = tk.Label(
+        main_frame,
+        text=f"How many {unit} of {ingredient} do you want to convert? ",
+        font=DEFAULT_FONT)
+    lbl.pack(side="top", pady=SMALL_PAD)
+
+    centered_frame = tk.Frame(main_frame, width=200, height=200)
+    centered_frame.pack(side="top", pady=SMALL_PAD)
+
+    global amount
+    amount = tk.Entry(centered_frame)
+    amount.pack()
+
+    btn = tk.Button(main_frame, text="Submit", command=submit)
+    btn.pack(side="bottom", pady=LARGE_PAD)
+
+
+def submit():
+    grams = int(amount.get()) * INGREDIENTS[ingredient[0]][1][unit]
+    clear_frame(main_frame)
+    lbl = tk.Label(
+        main_frame,
+        text=f"You need {grams} grams of {ingredient} for your recipe!",
+        font=DEFAULT_FONT)
+    lbl.pack(side="top", pady=SMALL_PAD)
 
 
 # Converter functions
 def single_ingredient():
-    clear_frame(frame1)
-    lbl = tk.Label(frame1, text="Pick your ingredient", font=LARGE_FONT)
+    clear_frame(main_frame)
+    lbl = tk.Label(main_frame, text="Pick your ingredient", font=LARGE_FONT)
     lbl.pack(side="top", pady=SMALL_PAD)
 
-    centered_frame = tk.Frame(frame1, width=200, height=200)
+    centered_frame = tk.Frame(main_frame, width=200, height=200)
     centered_frame.pack(side="top", pady=SMALL_PAD)
 
     # Dropdown options
@@ -65,19 +119,21 @@ def single_ingredient():
         ingredients.append(INGREDIENTS[ingredient][0])
 
     # Selected option variable
-    opt = tk.StringVar(value="flour")
+    global opt_ingredient
+    opt_ingredient = tk.StringVar(value="flour")
 
     # Dropdown menu
-    tk.OptionMenu(centered_frame, opt, *ingredients).pack(side="top", pady=10)
+    tk.OptionMenu(
+        centered_frame,
+        opt_ingredient,
+        *ingredients).pack(side="top", pady=10)
 
-    # Button to update label
-    btn = tk.Button(centered_frame, text="Submit", command=submit)
-    btn.pack()
+    opt_ingredient.trace("w", submit_ingredient)
 
 
 def recipe_file():
-    clear_frame(frame1)
-    lbl = tk.Label(frame1, text="You chose recipe file", font=LARGE_FONT)
+    clear_frame(main_frame)
+    lbl = tk.Label(main_frame, text="You chose recipe file", font=LARGE_FONT)
     lbl.pack(side="top", pady=SMALL_PAD)
 
 
@@ -89,21 +145,21 @@ def convert(ingredient, unit, amount):
     return output_amount
 
 
-root = tk.Tk()
+window = tk.Tk()
 
-root.title("Baking Converter")
+window.title("Baking Converter")
 
-root.geometry('1280x720')
+window.geometry('1280x720')
 
 # Creating menu bar
-menubar = tk.Menu(root)
+menubar = tk.Menu(window)
 
 # File menu
 menu = tk.Menu(menubar, tearoff=0)
 menubar.add_cascade(label="Menu", menu=menu)
 menu.add_command(label="New Conversion", command=start)
 menu.add_separator()
-menu.add_command(label='Exit', command=root.destroy)
+menu.add_command(label='Exit', command=window.destroy)
 
 # Help menu
 help = tk.Menu(menubar, tearoff=0)
@@ -115,43 +171,17 @@ help.add_command(label="About BakingConverter", command=None)
 
 # Start screen
 welcome_lbl = tk.Label(
-    root,
+    window,
     text="Welcome to the Baking Converter!",
     font=LARGE_FONT)
 welcome_lbl.pack(side="top", pady=LARGE_PAD)
 
-frame1 = tk.Frame(root, width=300, height=300)
-frame1.pack(side="top", pady=SMALL_PAD)
+main_frame = tk.Frame(window, width=300, height=300)
+main_frame.pack(side="top", pady=SMALL_PAD)
 
-btn = tk.Button(root, text="Home", command=start)
+btn = tk.Button(window, text="Home", command=start)
 btn.pack(side="bottom", pady=LARGE_PAD)
 
-
-def show():
-    lbl.config(text=opt.get())
-
-
-# Dropdown options
-days = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"]
-
-# Selected option variable
-opt = tk.StringVar(value="Monday")
-
-# Dropdown menu
-tk.OptionMenu(root, opt, *days).pack()
-
-# Button to update label
-tk.Button(root, text="Click Me", command=show).pack()
-
-lbl = tk.Label(root, text=" ")
-lbl.pack()
 
 start()
 # display_ingredients()
@@ -165,15 +195,5 @@ INGREDIENTS = {
         "b": ["butter", {"cups": 226, "sticks": 113, "tablespoons": 14}]
     }
 
-# Textbox for entry:
-# units = ["cups", "tablespoons"]
-# txt = Spinbox(root, justify="center", values=units)
-# txt.pack(side="top", pady=10)
-
-# # button:
-# btn = Button(root, text = "Is this just fantasy?", fg = "red", command=clicked) # noqa
-# btn.pack(side="top", pady=10)
-
-
-root.config(menu=menubar)
-root.mainloop()
+window.config(menu=menubar)
+window.mainloop()
